@@ -1,0 +1,13 @@
+- name: Register Server
+  redhat_subscription:
+    state: present
+    username: "{{ redhat_portal_username }}"
+    password: "{{ redhat_portal_password }}"
+    pool: '^(Red Hat Enterprise Linux for x86_64|Red Hat Ansible Engine)'
+    syspurpose:
+      usage: "Production"
+      role: "Red Hat Enterprise Server"
+      service_level_agreement: "Self-Support"
+      addons:
+        - "Smart Management"
+      sync: true

@@ -1,0 +1,24 @@
+- name: Install Cockpit
+  dnf:
+   name: 
+    - cockpit
+    - cockpit-machines
+    - cockpit-storaged
+    - cockpit-pcp
+    - cockpit-bridge
+    - cockpit-dashboard
+    - subscription-manager-cockpit
+   state: present
+- name: Disable external access to cockpit
+  firewalld:
+    service: cockpit
+    permanent: yes
+    state: disabled
+    immediate: yes
+- name: Start Cockpit service
+  systemd:
+    name: cockpit
+    enabled: yes
+    masked: no
+    state: started
+

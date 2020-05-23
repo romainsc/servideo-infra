@@ -1,0 +1,17 @@
+- name: Enable RHEL baseOS repo
+  rhsm_repository:
+   name: rhel-8-for-x86_64-baseos-rpms
+   state: enabled
+- name: Enable RHEL Appstream repo
+  rhsm_repository:
+   name: rhel-8-for-x86_64-appstream-rpms
+   state: enabled
+- name: Enable RHEL Supplementary repo
+  rhsm_repository:
+   name: rhel-8-for-x86_64-supplementary-rpms
+   state: enabled
+- name: Upgrade all packages
+  dnf:
+   name: '*'
+   state: latest
+

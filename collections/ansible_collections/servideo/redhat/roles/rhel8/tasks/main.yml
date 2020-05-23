@@ -1,0 +1,14 @@
+- name: Register system and attach the pool
+  import_tasks: register.yml
+  become: true
+- name: Minimal secure the system
+  import_tasks: minimal_secure.yml
+  become: true
+- name: Enable repositories and upgrade packages
+  import_tasks: repositories.yml
+  become: true
+- name: Install, authorize & start Cockpit
+  import_tasks: cockpit.yml
+  become: true
+
+

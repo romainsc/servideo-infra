@@ -1,0 +1,11 @@
+- name: Enable Firewalld
+  systemd:
+    name: firewalld
+    enabled: yes
+    masked: no
+    state: started
+- name: Completly disable cups
+  systemd:
+    name: cups
+    masked: yes
+
