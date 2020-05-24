@@ -1,0 +1,6 @@
+- name: Install prerequisites
+  import_tasks: prerequisites.yml
+  become: true
+- name: Register system to insight
+  import_tasks: register.yml
+  become: true
