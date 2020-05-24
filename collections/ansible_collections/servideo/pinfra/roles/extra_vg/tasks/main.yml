@@ -1,0 +1,4 @@
+- name: Create the volume group and related physical volume if needed
+  import_tasks: create_vg.yml
+  become: true
+

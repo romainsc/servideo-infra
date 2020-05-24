@@ -2,4 +2,10 @@
   roles:
     - servideo.redhat.rhel8
     - servideo.redhat.insight
+    - role: servideo.pinfra.extra_vg
+      vars:
+        vgname: vg.vm
+        pv_devices:
+          - /dev/sda3
+          - /dev/sdb3
  
