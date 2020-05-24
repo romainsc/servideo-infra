@@ -1,0 +1,8 @@
+- name: Install OpenSCAP
+  dnf:
+   name: 
+    - openscap-scanner
+    - scap-security-guide
+    - openscap-utils
+   state: present
+

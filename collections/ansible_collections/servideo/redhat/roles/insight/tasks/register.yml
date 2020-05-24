@@ -1,0 +1,5 @@
+- include_role:
+    name: RedHatInsights.insights-client
+  vars:
+    insights_display_name: "helper.hetzner001.servideo.org"
+
