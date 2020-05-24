@@ -3,11 +3,11 @@
     state: present
     username: "{{ redhat_portal_username }}"
     password: "{{ redhat_portal_password }}"
-    pool: '^(Red Hat Enterprise Linux for x86_64|Red Hat Ansible Engine)'
+    pool: "{{ redhat_rhel8_subscription_pool }}"
     syspurpose:
-      usage: "Production"
-      role: "Red Hat Enterprise Server"
+      usage: "Development/Test"
+      #role: "Red Hat Enterprise Server"
       service_level_agreement: "Self-Support"
-      addons:
-        - "Smart Management"
+      #addons:
+      #  - "Smart Management"
       sync: true
