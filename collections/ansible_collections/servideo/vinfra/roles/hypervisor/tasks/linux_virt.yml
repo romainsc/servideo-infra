@@ -1,0 +1,15 @@
+- name: Install virt module & virt-install tool
+  dnf:
+   name: 
+    - "@virt"
+    - virt-install
+   state: present
+- name: Start libvirt Daemon
+  systemd:
+    name: libvirtd
+    enabled: yes
+    masked: no
+    state: started
+
+# FIXME: If the host is not set up correctly, (can be checked with virt-host-validate)
+#        Theses tasks will not do it for you, ie: Add intel_iommu=on to kernel cmdline arguments.

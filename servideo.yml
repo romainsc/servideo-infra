@@ -12,3 +12,5 @@
       vars:
         connection_name: "Ethernet connexion"
         interface_name: enp0s31f6
+    - servideo.vinfra.hypervisor
+

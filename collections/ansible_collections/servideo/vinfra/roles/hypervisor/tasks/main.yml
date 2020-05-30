@@ -1,0 +1,6 @@
+- name: Install container capabilities
+  import_tasks: linux_container.yml
+  become: true
+- name: Install VM capabilities
+  import_tasks: linux_virt.yml
+  become: true

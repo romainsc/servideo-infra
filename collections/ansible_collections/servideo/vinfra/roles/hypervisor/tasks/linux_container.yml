@@ -1,0 +1,14 @@
+- name: Install container tools module
+  dnf:
+   name: 
+    - "@container-tools"
+    - slirp4netns
+    - podman
+   state: present
+- name: Increase user namespace for rootless container
+  sysctl:
+    name: user.max_user_namespaces
+    value: '28633'
+    state: present
+    sysctl_file: /etc/sysctl.d/userns.conf
+
