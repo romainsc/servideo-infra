@@ -11,4 +11,10 @@
     value: '28633'
     state: present
     sysctl_file: /etc/sysctl.d/userns.conf
+- name: Start podman service
+  systemd:
+    name: io.podman
+    enabled: yes
+    masked: no
+    state: started
 
