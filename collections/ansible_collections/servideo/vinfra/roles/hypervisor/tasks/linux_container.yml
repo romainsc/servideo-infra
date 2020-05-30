@@ -4,6 +4,7 @@
     - "@container-tools"
     - slirp4netns
     - podman
+    - fuse-overlayfs 
    state: present
 - name: Increase user namespace for rootless container
   sysctl:
