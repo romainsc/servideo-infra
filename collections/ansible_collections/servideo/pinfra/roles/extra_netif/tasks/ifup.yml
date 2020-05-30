@@ -1,0 +1,6 @@
+- include_role:
+    name: linux-system-roles.network 
+  vars:
+    network_connections:
+      - name: "{{ connection_name }}"
+        state: up

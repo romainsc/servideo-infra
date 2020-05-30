@@ -1,0 +1,2 @@
+- name: Change profile to ignore DNS provided by DHCP.
+  command: nmcli c modify "{{ connection_name }}" ipv4.ignore-auto-dns true

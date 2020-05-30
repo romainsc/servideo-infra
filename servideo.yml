@@ -8,4 +8,7 @@
         pv_devices:
           - /dev/sda3
           - /dev/sdb3
- 
+    - role: servideo.pinfra.extra_netif
+      vars:
+        connection_name: "Ethernet connexion"
+        interface_name: enp0s31f6

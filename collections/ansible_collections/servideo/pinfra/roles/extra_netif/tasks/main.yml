@@ -1,0 +1,12 @@
+- name: Apply additionnal network configuration
+  import_tasks: extra_netif.yml
+  become: true
+
+- name: Ignore DNS provided by DHCP
+  import_tasks: ignore_auto_dns.yml
+  become: true
+
+- name: Activate connection
+  import_tasks: ifup.yml
+  become: true
+
