@@ -1,0 +1,12 @@
+- name: Install VPN pre-requisites
+  import_tasks: prerequisites.yml
+  become: true
+  #- name: Configure the VPN response
+  #  import_tasks: responder.yml
+  #  become: true
+  #- name: Configure the routing
+  #  import_tasks: route.yml
+  #  become: true
+
+
+

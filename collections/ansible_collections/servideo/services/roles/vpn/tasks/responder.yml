@@ -1,0 +1,24 @@
+- include_role:
+    name: oukooveu.libreswan
+  vars:
+    ipsec_connections:
+      test:
+        local_gateway_ip: 'hetzner001.servideo.org'
+        remote_gateway_ip: '%any'
+        psk: 'test123'
+        options:
+          leftsubnets: '192.168.7.0/24'
+          rightsubnet: '100.64.0.0/16'
+          authby: 'secret'
+          auto: 'start'
+          type: 'tunnel'
+          ikelifetime: '8h'
+          keylife: '1h'
+          ike: 'aes128-sha1;modp1024'
+          phase2alg: 'aes128-sha1;modp1024'
+          keyingtries: '%forever'
+          keyexchange: 'ike'
+          dpddelay: '10'
+          dpdtimeout: '30'
+          dpdaction: 'restart_by_peer'
+

@@ -1,0 +1,18 @@
+- name: Install libreswan
+  dnf:
+   name: 
+    - libreswan
+   state: present
+- name: Allow IPsec port
+  firewalld:
+    service: ipsec
+    permanent: yes
+    state: enabled
+    immediate: yes
+- name: Start IPSEC service
+  systemd:
+    name: ipsec
+    enabled: yes
+    masked: no
+    state: started
+

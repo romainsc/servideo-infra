@@ -1,0 +1,10 @@
+- name: Configure responder routing
+  include_role:
+    name: ansible-network.rhel
+    tasks_from: cloud_vpn/configure_routing_responder
+  vars:
+    cloud_vpn_responder_provider: rhel
+    cloud_vpn_responder_cidr: 192.168.7.0/24
+    cloud_vpn_mode: main
+    cloud_vpn_routing: bgp
+
