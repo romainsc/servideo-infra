@@ -10,5 +10,7 @@
 - name: Install, authorize & start Cockpit
   import_tasks: cockpit.yml
   become: true
-
+- name: Install git
+  import_tasks: git.yml
+  become: true
 
