@@ -1,0 +1,6 @@
+---
+# tasks file for dns
+- name: Delete systemd unit
+  import_tasks: delete.yml
+  become: true
+
