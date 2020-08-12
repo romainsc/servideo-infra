@@ -1,6 +1,8 @@
 ---
 # tasks file for dns
-- name: Delete systemd unit
-  import_tasks: delete.yml
-  become: true
-
+- name: Prepare the build directory
+  import_tasks: prepare_build.yml
+- name: Build container image
+  import_tasks: build.yml
+- name: Clean the build directory
+  import_tasks: clean_builddir.yml

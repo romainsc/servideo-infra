@@ -1,12 +1,28 @@
-Role Name
+DNS server for Servidéo
 =========
 
-A brief description of the role goes here.
+## References
 
-Requirements
-------------
+- Based on [Core DNS](https://coredns.io/)
+- Built on top of the [Red Hat CoreDNS Container distribution](https://catalog.redhat.com/software/containers/rhacm1-tech-preview/coredns-rhel8/5ea9b377bed8bd66f8426bf4)
+- [Chapter 4. Running Containers as systemd Services with Podman Red Hat Enterprise Linux Atomic Host 7 | Red Hat Customer Portal](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html/managing_containers/running_containers_as_systemd_services_with_podman)
+- [Building, running, and managing containers Red Hat Enterprise Linux 8 | Red Hat Customer Portal](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/building_running_and_managing_containers/index)
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Service logic
+
+- run as non priviledged user
+
+- Expose port 1053 (`-p 1053:1053/udp` is your friend)
+
+- Runned via systemd
+
+- Deployed via the [podman_container_systemd role](https://galaxy.ansible.com/ikke_t/podman_container_systemd)
+
+## Requirements
+
+* containers.podman
+
+* ikke_t.podman_container_systemd
 
 Role Variables
 --------------
@@ -36,3 +52,5 @@ Author Information
 ------------------
 
 An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+
+# 

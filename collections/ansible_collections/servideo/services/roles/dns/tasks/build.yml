@@ -1,0 +1,9 @@
+- name: Build CoreDNS container image
+  containers.podman.podman_image:
+          name: coredns
+          path: /tmp/build
+          force: true
+          build:
+                  annotation:
+                          app: coredns
+

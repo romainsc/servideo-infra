@@ -1,0 +1,4 @@
+example.org {
+    file db.example.org
+    log
+}
