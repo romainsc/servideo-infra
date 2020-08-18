@@ -1,0 +1,48 @@
+- name: Add ”coredns” system account
+  user:
+    name: coredns
+    comment: CoreDNS system account
+    system: yes
+    state: present
+- name: check if user is in subuid file
+  lineinfile:
+    path: /etc/subuid
+    regexp: '^coredns:.*$'
+    state: absent
+  check_mode: yes
+  changed_when: false
+  register: uid_line
+
+- name: check if group is in subgid file
+  lineinfile:
+    path: /etc/subgid
+    regexp: '^coredns:.*$'
+    state: absent
+  check_mode: yes
+  register: gid_line
+  changed_when: false
+
+- name: ensure user is in subuid file, if it was missing
+  lineinfile:
+    path: /etc/subuid
+    regexp: "^coredns:.*"
+    line: "coredns:305536:65536"
+    create: yes
+    mode: '0644'
+    owner: root
+    group: root
+  when: not uid_line.found
+
+- name: ensure group is in subgid file, if it was missing
+  lineinfile:
+    path: /etc/subgid
+    regexp: "^coredns:.*"
+    line: "coredns:305536:65536"
+    create: yes
+    mode: '0644'
+    owner: root
+    group: root
+  when: not gid_line.found
+
+
+
