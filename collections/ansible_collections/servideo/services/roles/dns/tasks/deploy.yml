@@ -7,6 +7,7 @@
     container_run_args: >-
       --rm
       -p "{{ host_port }}:{{ qualified_exposed_port }}"
+      -p "{{ host_port }}:{{ exposed_port }}/tcp"
     container_state: running
   import_role:
     name: ikke_t.podman_container_systemd

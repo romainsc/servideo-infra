@@ -1,5 +1,13 @@
-- name: Copy the build directory
+- name: Copy the build directory with Dockerfile
   copy:
     src: "{{ builddir }}"
     dest: "{{ build_basedir }}"
+- name: Copy the DNS Corefile
+  copy:
+    src: "{{ servideo_config_dir }}dns/Corefile"
+    dest: "{{ build_basedir }}/{{ builddir }}"
+- name: Copy the DB files directory
+  copy:
+    src: "{{ servideo_config_dir }}dns/db"
+    dest: "{{ build_basedir }}/{{ builddir }}"
 

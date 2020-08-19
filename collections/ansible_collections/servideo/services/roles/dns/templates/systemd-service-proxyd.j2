@@ -1,0 +1,7 @@
+[Unit]
+Description=Socat proxy for {{ service_name }}
+
+
+[Service]
+ExecStart=/usr/lib/systemd/systemd-socket-proxyd 127.0.0.1:{{ host_port }}
+

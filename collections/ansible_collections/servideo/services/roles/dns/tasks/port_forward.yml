@@ -26,5 +26,28 @@
     name: "proxy-to-{{ service_name }}"
     state: started
 
+- name: Setup systemd stream socket for proxyd
+  template:
+    src: systemd-socket-proxyd.j2
+    dest: "{{ service_files_dir }}/proxyd-to-{{ service_name }}.socket"
+    owner: root
+    group: root
+  register: socket_file
+- name: Setup systemd stream service for proxyd
+  template:
+    src: systemd-service-proxyd.j2
+    dest: "{{ service_files_dir }}/proxyd-to-{{ service_name }}.service"
+    owner: root
+    group: root
+  register: service_file
+- name: Ensure proxyd to {{ service_name }} is enabled at boot
+  systemd:
+    name: "proxyd-to-{{ service_name }}"
+    enabled: yes
+    daemon_reload: yes
+- name: Ensure proxyd to {{ service_name }} is started
+  systemd:
+    name: "proxyd-to-{{ service_name }}"
+    state: started
 
 

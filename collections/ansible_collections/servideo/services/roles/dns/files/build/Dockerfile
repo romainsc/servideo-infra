@@ -3,7 +3,7 @@ USER root
 LABEL maintainer="Romain Chantereau"
 # Copy config
 COPY Corefile /Corefile
-COPY db.example.org /db.example.org
+COPY db/* /
 # Start the service
-EXPOSE 1053/udp 53/udp
+EXPOSE 1053/udp 1053/tcp
 ENTRYPOINT ["/coredns"]
