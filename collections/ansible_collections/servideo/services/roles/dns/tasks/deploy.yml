@@ -1,0 +1,13 @@
+- name: Register "{{ service_name }}" systemd unit
+  vars:
+    container_run_as_user: "{{ service_user }}"
+    container_run_as_group: "{{ service_user }}"
+    container_image: "{{ service_container_image_name }}"
+    container_name: "{{ service_container_image_name }}_run"
+    container_run_args: >-
+      --rm
+      -p "{{ host_port }}:{{ qualified_exposed_port }}"
+    container_state: running
+  import_role:
+    name: ikke_t.podman_container_systemd
+

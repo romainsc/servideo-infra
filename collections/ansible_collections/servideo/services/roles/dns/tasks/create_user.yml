@@ -1,48 +1,14 @@
-- name: Add ”coredns” system account
+- name: Add ”{{ service_name }}” system account
   user:
-    name: coredns
-    comment: CoreDNS system account
+    name: "{{ service_user }}"
+    comment: "{{ service_name }} system account"
     system: yes
     state: present
-- name: check if user is in subuid file
-  lineinfile:
-    path: /etc/subuid
-    regexp: '^coredns:.*$'
-    state: absent
-  check_mode: yes
-  changed_when: false
-  register: uid_line
-
-- name: check if group is in subgid file
-  lineinfile:
-    path: /etc/subgid
-    regexp: '^coredns:.*$'
-    state: absent
-  check_mode: yes
-  register: gid_line
-  changed_when: false
-
-- name: ensure user is in subuid file, if it was missing
-  lineinfile:
-    path: /etc/subuid
-    regexp: "^coredns:.*"
-    line: "coredns:305536:65536"
-    create: yes
-    mode: '0644'
-    owner: root
-    group: root
-  when: not uid_line.found
-
-- name: ensure group is in subgid file, if it was missing
-  lineinfile:
-    path: /etc/subgid
-    regexp: "^coredns:.*"
-    line: "coredns:305536:65536"
-    create: yes
-    mode: '0644'
-    owner: root
-    group: root
-  when: not gid_line.found
-
-
+- name: Check "{{ service_name }}" subid
+  import_role:
+    name: ikke_t.podman_container_systemd
+    tasks_from: check_subid
+  vars:
+    container_run_as_group: "{{ service_user }}"
+    container_run_as_user: "{{ service_user }}"
 

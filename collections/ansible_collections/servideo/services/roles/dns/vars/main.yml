@@ -1,2 +1,12 @@
 ---
 # vars file for dns
+service_user: "coredns"
+service_name: "CoreDNS"
+builddir: "build"
+build_basedir: "/tmp/"
+service_container_image_name: "coredns"
+exposed_port: "53"
+port_protocol: "udp"
+host_port: "1053"
+qualified_exposed_port: "{{ exposed_port }}/{{ port_protocol }}"
+service_files_dir: /etc/systemd/system

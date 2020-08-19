@@ -1,5 +1,5 @@
 - name: Copy the build directory
   copy:
-    src: build
-    dest: /tmp/
+    src: "{{ builddir }}"
+    dest: "{{ build_basedir }}"
 

@@ -1,0 +1,30 @@
+- name: Enable service port {{ service_name }}
+  firewalld:
+    service: dns
+    zone: public
+    permanent: yes
+    immediate: yes
+    state: enabled
+- name: Check socat is installed
+  package:
+    name: socat
+    state: present
+- name: Deploy the socat proxy to {{ service_name }}
+  template:
+    src: systemd-service-proxy-socat.j2
+    dest: "{{ service_files_dir }}/proxy-to-{{ service_name }}.service"
+    owner: root
+    group: root
+  register: service_file
+- name: Ensure socat proxy to {{ service_name }} is enabled at boot
+  systemd:
+    name: "proxy-to-{{ service_name }}"
+    enabled: yes
+    daemon_reload: yes
+- name: Ensure socat proxy to {{ service_name }} is started
+  systemd:
+    name: "proxy-to-{{ service_name }}"
+    state: started
+
+
+
