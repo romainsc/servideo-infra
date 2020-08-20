@@ -50,16 +50,16 @@
   register: service_file
   loop: "{{ port_mapping }}"
   when: item.protocol == "tcp"
-- name: Ensure proxyd to {{ service_name }} is enabled at boot
+- name: Ensure proxyd socket to {{ service_name }} is enabled at boot
   systemd:
-    name: "proxyd-to-{{ service_name }}-{{ item.protocol }}-port-{{ item.ext_port }}"
+    name: "proxyd-to-{{ service_name }}-{{ item.protocol }}-port-{{ item.ext_port }}.socket"
     enabled: yes
     daemon_reload: yes
   loop: "{{ port_mapping }}"
   when: item.protocol == "tcp"
-- name: Ensure proxyd to {{ service_name }} is started
+- name: Ensure proxyd socket to {{ service_name }} is started
   systemd:
-    name: "proxyd-to-{{ service_name }}-{{ item.protocol }}-port-{{ item.ext_port }}"
+    name: "proxyd-to-{{ service_name }}-{{ item.protocol }}-port-{{ item.ext_port }}.socket"
     state: started
   loop: "{{ port_mapping }}"
   when: item.protocol == "tcp"
