@@ -20,3 +20,8 @@
   import_role:
     name: ikke_t.podman_container_systemd
 
+- name: Restart the service
+  systemd:
+   name: "{{ service_container_image_name }}_run-container-pod.service"
+   state: restarted
+
