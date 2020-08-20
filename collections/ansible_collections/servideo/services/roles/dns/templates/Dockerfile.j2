@@ -4,6 +4,8 @@ LABEL maintainer="Romain Chantereau"
 # Copy config
 COPY Corefile /Corefile
 COPY db/* /
+COPY keys/* /
 # Start the service
-EXPOSE 53/udp 53/tcp
+EXPOSE {% for item in port_mapping %}{{ item.exposed_port }}/{{ item.protocol }} {% endfor %}
+
 ENTRYPOINT ["/coredns"]
