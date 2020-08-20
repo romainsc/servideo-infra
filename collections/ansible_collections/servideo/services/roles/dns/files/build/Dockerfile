@@ -5,5 +5,5 @@ LABEL maintainer="Romain Chantereau"
 COPY Corefile /Corefile
 COPY db/* /
 # Start the service
-EXPOSE 1053/udp 1053/tcp
+EXPOSE 53/udp 53/tcp
 ENTRYPOINT ["/coredns"]
