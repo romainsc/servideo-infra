@@ -13,4 +13,8 @@
         connection_name: "Ethernet connexion"
         interface_name: enp0s31f6
     - servideo.vinfra.hypervisor
+    - role: servideo.services.dns
+      vars:
+        ext_ip_address: "95.217.96.40"
+
 

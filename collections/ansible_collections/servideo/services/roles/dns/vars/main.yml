@@ -15,4 +15,3 @@ port_mapping:
     ext_port: "53"
     protocol: "tcp"
 service_files_dir: /etc/systemd/system
-ext_ip_address: "95.217.96.40"
