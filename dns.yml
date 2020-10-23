@@ -1,0 +1,6 @@
+- hosts: hetzners
+  roles:
+    - role: servideo.services.dns
+      vars:
+        ext_ip_address: "95.217.96.40"
+
