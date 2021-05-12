@@ -3,5 +3,6 @@
     - role: servideo.services.dns
       vars:
         ext_ip_address: "95.216.28.178"
-        service_state: present
+        service_state: absent
+
 
