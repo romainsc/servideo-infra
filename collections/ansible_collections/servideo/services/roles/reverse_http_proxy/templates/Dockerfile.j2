@@ -1,0 +1,7 @@
+FROM registry.access.redhat.com/ubi8/nginx-118
+USER root
+LABEL maintainer="Romain Chantereau"
+EXPOSE {% for item in port_mapping %}{{ item.exposed_port }}/{{ item.protocol }} {% endfor %}
+
+# Start the service
+CMD nginx -g "daemon off;"

@@ -1,0 +1,17 @@
+---
+# tasks file for ngnix reverse proxy
+- name: init the build & running env
+  block:
+
+  - name: Create user for running "{{ service_systemd_name }}"
+    import_tasks: create_user.yml
+    become: true
+  - name: Prepare the "{{ service_systemd_name }}" build environment
+    import_tasks: prepare_build.yml
+    become: true
+    become_user: "{{ service_user }}"
+  when: service_state == "present"
+
+- name: Create and run ngnix reverse proxy pod service
+  import_role:
+    name: servideo.pod.service

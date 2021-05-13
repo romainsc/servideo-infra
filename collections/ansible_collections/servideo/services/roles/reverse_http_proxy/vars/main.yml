@@ -1,0 +1,16 @@
+---
+# vars file for nginx
+service_user: "nginx"
+service_systemd_name: "Nginx-rproxy"
+service_container_image_names:
+  - "nginx"
+port_mapping:
+  - exposed_port: "8080"
+    host_port: "8080"
+    ext_port: "80"
+    protocol: "tcp"
+  - exposed_port: "8443"
+    host_port: "8443"
+    ext_port: "443"
+    protocol: "tcp"
+
