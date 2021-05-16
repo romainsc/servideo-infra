@@ -1,5 +1,5 @@
 ---
-# tasks file for ngnix reverse proxy
+# tasks file for haproxy reverse proxy
 - name: init the build & running env
   block:
 
@@ -12,6 +12,14 @@
     become_user: "{{ service_user }}"
   when: service_state == "present"
 
-- name: Create and run ngnix reverse proxy pod service
+- name: Create and run haproxy reverse proxy pod service
   import_role:
     name: servideo.pod.service
+
+# Need to kill all processes (like podman)
+- name: Clean after removal
+  block:
+  - name: del user
+    import_tasks: del_user.yml
+    become: true
+  when: service_state == "absent"
