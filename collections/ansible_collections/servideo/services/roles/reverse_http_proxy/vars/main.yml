@@ -1,9 +1,9 @@
 ---
-# vars file for nginx
-service_user: "nginx"
-service_systemd_name: "Nginx-rproxy"
+# vars file for haproxy
+service_user: "haproxy"
+service_systemd_name: "Haproxy-rproxy"
 service_container_image_names:
-  - "nginx"
+  - "haproxy"
 port_mapping:
   - exposed_port: "8080"
     host_port: "8080"
@@ -12,5 +12,8 @@ port_mapping:
   - exposed_port: "8443"
     host_port: "8443"
     ext_port: "443"
+    protocol: "tcp"
+  - exposed_port: "1936"
+    host_port: "1936"
     protocol: "tcp"
 

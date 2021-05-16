@@ -6,4 +6,8 @@
   template:
     src: Dockerfile.j2
     dest: "{{ build_basedir }}/{{ builddir }}/Dockerfile"
+- name: Copy the configuration
+  copy:
+    src: "{{ servideo_config_dir }}reverse_http_proxy/haproxy.cfg"
+    dest: "{{ build_basedir }}/{{ builddir }}"
 
