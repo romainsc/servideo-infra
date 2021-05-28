@@ -1,0 +1,7 @@
+- hosts: hetzners
+  roles:
+    - role: servideo.services.lasaillante_web
+      vars:
+        ext_ip_address: "95.216.28.178"
+        service_state: present
+

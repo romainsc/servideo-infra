@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: {{ service_systemd_name }}
+  name: {{ service_systemd_name }}
+spec:
+  containers:
+  - command:
+    env:
+    - name: MARIADB_USER
+      value: ls_wordpress
+    - name: MARIADB_DATABASE
+      value: la_saillante_wordpress
+    - name: ALLOW_EMPTY_PASSWORD
+      value: yes
+
+    image: bitnami/mariadb:latest
+    name: mariadb
+  containers:
+  - command:
+    env:
+    - name: MARIADB_HOST
+      value: mariadb
+    - name: MARIADB_PORT_NUMBER
+      value: 3306
+    - name: WORDPRESS_DATABASE_USER
+      value: ls_wordpress
+    - name: WORDPRESS_DATABASE_NAME
+      value: la_saillante_wordpress
+    - name: ALLOW_EMPTY_PASSWORD
+      value: yes
+
+    image: bitnami/wordpress:latest
+    name: wordpress
+

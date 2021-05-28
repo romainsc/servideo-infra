@@ -1,0 +1,28 @@
+- name: Init the podman port mapping args
+  set_fact:
+    podman_port_mapping_args: ""
+
+- name: create Service pod yaml file
+  template:
+    src: service_pod.yaml.j2
+    dest: "{{ service_pod_yaml_path }}"
+
+- name: Register "{{ service_systemd_name }}" systemd unit
+  vars:
+    container_run_as_user: "{{ service_user }}"
+    container_run_as_group: "{{ service_user }}"
+    container_image_list: "{{ service_container_image_names }}"
+    container_name: "{{ service_systemd_name }}"
+    container_pod_yaml: "{{ service_pod_yaml_path }}"
+    container_state: running
+  import_role:
+    name: ikke_t.podman_container_systemd
+
+- name: Ensure the service is started
+  become: true
+  become_user: "{{ service_user }}"
+  systemd:
+   name: "{{ service_systemd_name }}-container-pod-{{ service_user }}.service" 
+   scope: user
+   state: started
+

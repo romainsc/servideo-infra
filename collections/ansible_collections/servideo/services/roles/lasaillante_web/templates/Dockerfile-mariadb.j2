@@ -1,0 +1,13 @@
+FROM bitnami/mariadb:latest
+LABEL maintainer="Romain Chantereau"
+
+ENV MARIADB_USER=ls_wordpress \
+    MARIADB_DATABASE=la_saillante_wordpress \
+    ALLOW_EMPTY_PASSWORD=yes
+
+
+EXPOSE 3306
+
+USER 1001
+ENTRYPOINT [ "/opt/bitnami/scripts/mariadb/entrypoint.sh" ]
+CMD [ "/opt/bitnami/scripts/mariadb/run.sh" ]

@@ -1,0 +1,25 @@
+---
+# tasks file for haproxy reverse proxy
+- name: init the build & running env
+  block:
+
+  - name: Create user for running "{{ service_systemd_name }}"
+    import_tasks: create_user.yml
+    become: true
+  - name: Prepare the "{{ service_systemd_name }}" build environment
+    import_tasks: prepare_build.yml
+    become: true
+    become_user: "{{ service_user }}"
+  - name: create pod
+    import_tasks: deploy.yml
+  - name: Forward port
+    import_tasks: post_forward.yml
+  when: service_state == "present"
+
+# Need to kill all processes (like podman)
+- name: Clean after removal
+  block:
+  - name: del user
+    import_tasks: del_user.yml
+    become: true
+  when: service_state == "absent"

@@ -1,0 +1,17 @@
+FROM bitnami/wordpress:latest
+LABEL maintainer="Romain Chantereau"
+
+ENV MARIADB_HOST=mariadb \
+    MARIADB_PORT_NUMBER=3306 \
+    WORDPRESS_DATABASE_USER=ls_wordpress \
+    WORDPRESS_DATABASE_NAME=la_saillante_wordpress \
+    ALLOW_EMPTY_PASSWORD=yes
+
+
+EXPOSE 8080 8443
+USER 1001
+
+ENTRYPOINT ["/opt/bitnami/scripts/wordpress/entrypoint.sh"]
+CMD ["/opt/bitnami/scripts/apache/run.sh"]
+
+

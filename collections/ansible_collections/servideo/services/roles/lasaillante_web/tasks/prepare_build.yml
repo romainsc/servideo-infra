@@ -1,0 +1,11 @@
+- name: Create the build directory if it does not exist
+  file:
+    path: "{{ build_basedir }}/{{ builddir }}/{{ item }}"
+    state: directory
+  loop: "{{ service_container_image_names }}"
+- name: Copy the Dockerfile
+  template:
+    src: Dockerfile-{{ item }}.j2
+    dest: "{{ build_basedir }}/{{ builddir }}/{{ item }}/Dockerfile"
+  loop: "{{ service_container_image_names }}"
+

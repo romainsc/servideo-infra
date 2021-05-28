@@ -1,0 +1,8 @@
+- name: Del ”{{ service_name }}” system account
+  user:
+    name: "{{ service_user }}"
+    comment: "{{ service_systemd_name }} system account"
+    system: yes
+    state: absent
+    remove: yes
+
