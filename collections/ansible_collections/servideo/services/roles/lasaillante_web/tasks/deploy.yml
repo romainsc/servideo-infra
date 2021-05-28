@@ -1,11 +1,41 @@
-- name: Init the podman port mapping args
-  set_fact:
-    podman_port_mapping_args: ""
+- name: Copy service pod yaml
+  copy:
+    src: "{{ servideo_config_dir }}la_saillante/wordpress/pod/lasaillante_pod.yaml"
+    dest: "~/{{ service_pod_yaml }}"
+  become: true
+  become_user: "{{ service_user }}"
 
-- name: create Service pod yaml file
-  template:
-    src: service_pod.yaml.j2
-    dest: "{{ service_pod_yaml_path }}"
+- name: ensure Database directory exists
+  file:
+    path: "~/database"
+    state: directory
+    mode: '0770'
+  become: true
+  become_user: "{{ service_user }}"
+
+- name: Ensure Wordpress data directory exists
+  file:
+    path: "~/wp_data"
+    state: directory
+    mode: '0770'
+  become: true
+  become_user: "{{ service_user }}"
+
+- name: Ensure Apache data directory exists
+  file:
+    path: "~/apache_data"
+    state: directory
+    mode: '0770'
+  become: true
+  become_user: "{{ service_user }}"
+
+- name: Ensure PHP data directory exists
+  file:
+    path: "~/php_data"
+    state: directory
+    mode: '0770'
+  become: true
+  become_user: "{{ service_user }}"
 
 - name: Register "{{ service_systemd_name }}" systemd unit
   vars:
@@ -13,7 +43,7 @@
     container_run_as_group: "{{ service_user }}"
     container_image_list: "{{ service_container_image_names }}"
     container_name: "{{ service_systemd_name }}"
-    container_pod_yaml: "{{ service_pod_yaml_path }}"
+    container_pod_yaml: "{{ service_pod_yaml }}"
     container_state: running
   import_role:
     name: ikke_t.podman_container_systemd

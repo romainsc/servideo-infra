@@ -4,10 +4,6 @@ service_user: "lasaillante"
 service_systemd_name: "La-saillante-wordpress"
 service_pod_yaml: "la_saillante_pod.yaml"
 service_container_image_names:
-  - "bitnami/mariadb:latest"
-  - "bitnami/wordpress:latest"
-port_mapping:
-  - exposed_port: "8080"
-    host_port: "5080"
-    protocol: "tcp"
+  - "bitnami/mariadb:10.5.10"
+  - "bitnami/wordpress:5.7.2"
 
