@@ -2,8 +2,15 @@
 # vars file for haproxy
 service_user: "haproxy"
 service_systemd_name: "Haproxy-rproxy"
+service_pod_yaml: "haproxy_pod.yaml"
+builddir: "build"
+build_basedir: "/tmp/"
+
 service_container_image_names:
-  - "haproxy"
+  - "registry.access.redhat.com/ubi8/pause"
+  - "registry.access.redhat.com/ubi8/pause"
+service_container_image_names_to_build:
+  - "servideo-haproxy"
 port_mapping:
   - exposed_port: "8080"
     host_port: "8080"

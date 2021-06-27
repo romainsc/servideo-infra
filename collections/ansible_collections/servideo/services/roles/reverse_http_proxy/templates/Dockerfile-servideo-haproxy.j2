@@ -3,8 +3,6 @@ USER root
 RUN yum -y install haproxy; yum clean all; systemctl enable haproxy;
 LABEL maintainer="Romain Chantereau"
 
-COPY haproxy.cfg /etc/haproxy/haproxy.cfg
-
 EXPOSE {% for item in port_mapping %}{{ item.exposed_port }}/{{ item.protocol }} {% endfor %}
 
 # Start the service

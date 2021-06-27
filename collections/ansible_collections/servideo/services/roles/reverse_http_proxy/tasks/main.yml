@@ -10,11 +10,21 @@
     import_tasks: prepare_build.yml
     become: true
     become_user: "{{ service_user }}"
+  - name: Build
+    import_tasks: build.yml
+    become: true
+    become_user: "{{ service_user }}"
+  - name: Clean
+    import_tasks: clean_builddir.yml
+    become: true
+    become_user: "{{ service_user }}"
+  - name: create pod
+    import_tasks: deploy.yml
+    become: true
+  - name: setup port forward
+    import_tasks: port_forward.yml
+    become: true
   when: service_state == "present"
-
-- name: Create and run haproxy reverse proxy pod service
-  import_role:
-    name: servideo.pod.service
 
 # Need to kill all processes (like podman)
 - name: Clean after removal

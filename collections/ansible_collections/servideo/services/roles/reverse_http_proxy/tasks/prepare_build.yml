@@ -1,13 +1,11 @@
 - name: Create the build directory if it does not exist
   file:
-    path: "{{ build_basedir }}/{{ builddir }}"
+    path: "{{ build_basedir }}/{{ builddir }}/{{ item }}"
     state: directory
+  loop: "{{ service_container_image_names_to_build }}"
 - name: Copy the Dockerfile
   template:
-    src: Dockerfile.j2
-    dest: "{{ build_basedir }}/{{ builddir }}/Dockerfile"
-- name: Copy the configuration
-  copy:
-    src: "{{ servideo_config_dir }}reverse_http_proxy/haproxy.cfg"
-    dest: "{{ build_basedir }}/{{ builddir }}"
+    src: Dockerfile-{{ item }}.j2
+    dest: "{{ build_basedir }}/{{ builddir }}/{{ item }}/Dockerfile"
+  loop: "{{ service_container_image_names_to_build }}"
 

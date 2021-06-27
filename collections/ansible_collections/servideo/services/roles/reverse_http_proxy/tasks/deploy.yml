@@ -1,0 +1,42 @@
+- name: Copy service pod yaml
+  copy:
+    src: "{{ servideo_config_dir }}reverse_http_proxy/pod/haproxy_pod.yaml"
+    dest: "~/{{ service_pod_yaml }}"
+  become: true
+  become_user: "{{ service_user }}"
+
+- name: ensure ha config directory exists
+  file:
+    path: "~/haproxy"
+    state: directory
+    mode: '0770'
+  become: true
+  become_user: "{{ service_user }}"
+
+- name: Copy the configuration
+  copy:
+    src: "{{ servideo_config_dir }}reverse_http_proxy/config/haproxy.cfg"
+    dest: "~/haproxy"
+  become: true
+  become_user: "{{ service_user }}"
+
+
+- name: Register "{{ service_systemd_name }}" systemd unit
+  vars:
+    container_run_as_user: "{{ service_user }}"
+    container_run_as_group: "{{ service_user }}"
+    container_image_list: "{{ service_container_image_names }}"
+    container_name: "{{ service_systemd_name }}"
+    container_pod_yaml: "/home/haproxy/{{ service_pod_yaml }}"
+    container_state: running
+  import_role:
+    name: ikke_t.podman_container_systemd
+
+- name: Ensure the service is started
+  become: true
+  become_user: "{{ service_user }}"
+  systemd:
+   name: "{{ service_systemd_name }}-container-pod-{{ service_user }}.service" 
+   scope: user
+   state: started
+
