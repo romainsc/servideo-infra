@@ -1,0 +1,123 @@
+- hosts: hetzners
+  become: true
+  become_user: haproxy
+  tasks:
+    - name: Create  certificate directory
+      file:
+        dest: "~/certs"
+        state: directory
+        mode: '0750'
+
+    - name: Create  certificate directory
+      file:
+        dest: "~/letsencrypt-private"
+        state: directory
+        mode: '0750'
+    - name: Generate an OpenSSL private key (ECC SECP384R1)
+      openssl_privatekey:
+        path: "~/letsencrypt-private/account.key"
+        type: ECC
+        curve: secp384r1
+        backup: yes
+    - name: Generate an OpenSSL private key with the default values (ECC SECP384R1)
+      openssl_privatekey:
+        path: "~/certs/servideo.key"
+        type: ECC
+        curve: secp384r1
+        backup: yes
+    - name: Generate an OpenSSL CSR with subjectAltName extension with dynamic list
+      openssl_csr:
+        path: "~/certs/servideo.csr"
+        privatekey_path: "~/certs/servideo.key"
+        subject_alt_name: "{{ item.value | map('regex_replace', '^', 'DNS:') | list }}"
+      with_dict:
+        dns_server:
+        - www.servideo.org
+        - nextcloud.servideo.org
+    - name: Create a challenge for sample.com using a account key file.
+      acme_certificate:
+        account_key_src: "~/letsencrypt-private/account.key"
+        csr: "~/certs/servideo.csr"
+        dest: "~/certs/servideo.crt"
+        fullchain_dest: "~/haproxy/certs/servideo-fullchain.crt"
+        acme_version: 2
+        challenge: http-01
+        acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+        #acme_directory: "https://acme-staging-v02.api.letsencrypt.org/directory"
+        remaining_days: 60
+        account_email: romain@chantereau.fr
+        terms_agreed: yes
+      register: letsencrypt_challenge
+    - name: Create the challenge directories
+      file:
+        dest: "~/letsencrypt-challenges/{{ item.key }}/.well-known/acme-challenge"
+        state: directory
+        mode: '0750'
+      loop: "{{ letsencrypt_challenge.challenge_data | dict2items }}"
+      when: letsencrypt_challenge is changed
+    
+    - name: Create challenge files
+      copy:
+        dest: "~/letsencrypt-challenges/{{ item.key }}/{{ item.value['http-01']['resource'] }}"
+        content: "{{ item.value['http-01']['resource_value'] }}"
+      loop: "{{ letsencrypt_challenge.challenge_data | dict2items }}"
+      when: letsencrypt_challenge is changed
+
+    - name: Let the challenge be validated and retrieve the cert and intermediate certificate
+      acme_certificate:
+        account_key_src: "~/letsencrypt-private/account.key"
+        csr: "~/certs/servideo.csr"
+        dest: "~/certs/servideo.crt"
+        fullchain_dest: "~/certs/servideo-fullchain.crt"
+        acme_version: 2
+        challenge: http-01
+        acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+        #acme_directory: "https://acme-staging-v02.api.letsencrypt.org/directory"
+        account_email: romain@chantereau.fr
+        terms_agreed: yes
+        remaining_days: 60
+        data: "{{ letsencrypt_challenge }}"
+      when: letsencrypt_challenge is changed
+
+    - name: Create assembling directory
+      file:
+        dest: "~/certs/assemble"
+        state: directory
+        mode: '0750'
+    - name: Copy certificate
+      copy:
+        remote_src: yes
+        src: "~/certs/servideo.crt"
+        dest: "~/certs/assemble/01"
+
+    - name: Copy key
+      copy:
+        remote_src: yes
+        src: "~/certs/servideo.key"
+        dest: "~/certs/assemble/02"
+
+    - name: Concatenate
+      assemble:
+        src: "~/certs/assemble"
+        dest: "~/certs/servideo.pem"
+
+    - name: Delete build directory
+      file:
+        path: "~/certs/assemble"
+        state: absent
+
+    - name: Set correct SElinux context
+      become: true
+      become_user: root
+      sefcontext:
+        target: '/home/haproxy/certs(/.*)?'
+        setype: etc_t
+        state: present
+
+
+    - name: Apply new SELinux file context to filesystem
+      command: restorecon -irv /home/haproxy/certs
+      become: true
+      become_user: root
+
+    
