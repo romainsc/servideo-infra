@@ -81,6 +81,16 @@
     - item.ext_port is defined 
 - name: Ensure proxyd socket to {{ service_name }} is started
   systemd:
+    name: "proxyd-to-{{ service_systemd_name }}-{{ item.protocol }}-port-{{ item.ext_port|default('None') }}.service"
+    state: stopped
+    scope: system
+  loop: "{{ port_mapping }}"
+  when:
+    - item.protocol == "tcp"
+    - item.ext_port is defined 
+
+- name: Ensure proxyd socket to {{ service_name }} is started
+  systemd:
     name: "proxyd-to-{{ service_systemd_name }}-{{ item.protocol }}-port-{{ item.ext_port|default('None') }}.socket"
     state: restarted
     scope: system
