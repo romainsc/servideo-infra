@@ -1,0 +1,30 @@
+---
+- name: IaC tasks
+  hosts: hetzners
+  become: true
+
+  tasks:
+          - name: port forward 53 -> localhost:1053
+            firewalld:
+             rich_rule: rule family=ipv4 source address=95.216.28.178 forward-port port=53 protocol=tcp to-port=1053
+             state: disabled
+             permanent: yes
+          - name: enable port 53
+            firewalld:
+                port: 53/tcp
+                state: disabled
+                permanent: yes
+          - name: enable port 1053
+            firewalld:
+                port: 1053/tcp
+                state: disabled
+                permanent: yes
+          - name: enable port 1053
+            firewalld:
+                service: dns
+                state: disabled
+                permanent: yes
+
+
+
+       

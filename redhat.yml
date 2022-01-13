@@ -1,0 +1,6 @@
+- hosts: hetzners
+  roles:
+    - servideo.redhat.rhel8
+    - servideo.redhat.insight
+
+
