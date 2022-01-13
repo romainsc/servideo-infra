@@ -32,9 +32,11 @@ runtime_directories:
          name: "haproxy"
 
 # List of container image to force in the service pod registration
+# At least two images must be presents (build + pull) in order to trigger the use of the pod and not a single container.
+# WORKAROUND: As the module try to pull, even the locally built images, the image list is a fake one until I set up a local registry
 container_images_to_pull:
   - "registry.access.redhat.com/ubi8/pause"
-  - "registry.access.redhat.com/ubi8/python-39"
+  - "registry.access.redhat.com/ubi8/ubi-minimal"
 
 # Each item of this list will used as follow:
 # * exposed_port: the port the container will expose inside the pod
