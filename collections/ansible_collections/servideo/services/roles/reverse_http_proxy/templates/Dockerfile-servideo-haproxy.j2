@@ -1,6 +1,6 @@
-FROM registry.access.redhat.com/ubi8/ubi-init
+FROM registry.access.redhat.com/ubi8/ubi-minimal
 USER root
-RUN yum -y install haproxy; yum clean all; systemctl enable haproxy;
+RUN microdnf install haproxy; microdnf clean all; systemctl enable haproxy;
 LABEL maintainer="Romain Chantereau"
 
 EXPOSE {% for item in port_mapping %}{{ item.exposed_port }}/{{ item.protocol }} {% endfor %}
