@@ -28,8 +28,14 @@ runtime_directories:
    - selinux_labels:
        - "etc_t"
      directories:
-       - mode: '0770'
-         name: "haproxy"
+      - mode: '0770'
+        name: "haproxy"
+      - mode: '0770'
+        name: "certs"
+      - mode: '0770'
+        name: "letsencrypt-challenges"
+      - mode: '0770'
+        name: "letsencrypt-private"
 
 # List of container image to force in the service pod registration
 # At least two images must be presents (build + pull) in order to trigger the use of the pod and not a single container.
@@ -37,6 +43,7 @@ runtime_directories:
 container_images_to_pull:
   - "registry.access.redhat.com/ubi8/pause"
   - "registry.access.redhat.com/ubi8/ubi-minimal"
+  - "registry.access.redhat.com/ubi8/python-39"
 
 # Each item of this list will used as follow:
 # * exposed_port: the port the container will expose inside the pod
@@ -46,6 +53,7 @@ container_images_to_pull:
 # * ext_port: 
 #   * The port that will be accessible from outsite, where the proxy will listen bound to {{ ext_ip_address }}
 #   * This port will be opened on firewalld in the “public” zone.
+#   * If non existant, then the port is only exposed internally to the pod
 # * host_port: The port where the connection will be proxied to bound to localhost
 # * Depending on the protocol, the system proxy will be:
 #   * udp: socat
