@@ -1,0 +1,74 @@
+---
+# vars file for haproxy
+# the username the pod will be built & will run as
+service_user: "nextcloud" 
+# The systemd unit name and app annotation of the images that will be built (if applicable)
+# This name is also used as identifier of the subfolder to the {{ servideo_config_dir }} where the service_pod.yaml is expected to exist
+service_systemd_name: "servideo-nextcloud" 
+
+# The directory where the build will happen
+build_basedir: "/tmp/"
+# The pod dedicated build directory under the {{ build_basedir }}
+builddir: "build"
+# build_artefact_basedir: 
+# The container image identifier that will be built
+# Each item of this list of identifier will be used:
+# * as the dedicated build subfolder name under {{ builddir }}
+#    * in this folder the image Dockerfile will be generated from the “Dockerfile-{{ item }}.j2”
+#    * if defined, all the files and folder in the {{ item }} subfolder of the {{ build_artefact_basedir }} will be copied.
+#container_images_to_build: 
+
+# The service will certainly need runtime data with specific SELinux labels
+# For each item of the main list:
+# * the {{ selinux_labels }} labels are applied to all the directory name in the {{ directories }} list
+# * Each item of the {{ directories }} are copied with {{ mode }}
+#   * the {{ item }}  must exists in the {{ service_systemd_name }} in the {{ servideo_config_dir }}
+runtime_directories:
+   - selinux_labels:
+       - "etc_t"
+     directories:
+      - mode: "770"
+        name: "apache2"
+   - selinux_labels:
+       - "mysqld_db_t"
+     directories:
+      - mode: "770"
+        name: "database"
+   - selinux_labels:
+        - "httpd_sys_rw_content_t"
+     directories:
+      - mode: "770"
+        name: "html"
+
+
+# List of container image to force in the service pod registration
+# At least two images must be presents (build + pull) in order to trigger the use of the pod and not a single container.
+# WORKAROUND: As the module try to pull, even the locally built images, the image list is a fake one until I set up a local registry
+container_images_to_pull:
+  - "registry.redhat.io/rhel8/mysql-80:1-159"
+  - "docker.io/nextcloud:13.0.12-fpm"
+  - "quay.io/bitnami/nginx:latest"
+
+
+# Registry to log into wit user & password
+authenticated_registries:
+  - registry: "registry.redhat.io"
+    username: "{{redhat_portal_username }}"
+    password: "{{ redhat_portal_password }}"
+
+
+# Each item of this list will used as follow:
+# * exposed_port: the port the container will expose inside the pod
+# * protocol: the tcp or udp protocol.
+# Both theses two values will be declared in the generated Dockerfile if image will be built.
+# Then depending on the protocol a system wide (not user) systemd driven proxy will be registered and deployed:
+# * ext_port: 
+#   * The port that will be accessible from outsite, where the proxy will listen bound to {{ ext_ip_address }}
+#   * This port will be opened on firewalld in the “public” zone.
+#   * If non existant, then the port is only exposed internally to the pod
+# * host_port: The port where the connection will be proxied to bound to localhost
+# * Depending on the protocol, the system proxy will be:
+#   * udp: socat
+#   * tcp: internal systemd proxyd  
+#port_mapping:
+ 

@@ -34,6 +34,7 @@
         dns_server:
         - www.servideo.org
         - nextcloud.servideo.org
+        - nextcloud-staging.servideo.org
     - name: Create a challenge for sample.com using a account key file.
       acme_certificate:
         account_key_src: "~/letsencrypt-private/account.key"
@@ -44,6 +45,7 @@
         challenge: http-01
         acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
         #acme_directory: "https://acme-staging-v02.api.letsencrypt.org/directory"
+        force: yes # for instance when adding domains…
         remaining_days: 60
         account_email: romain@chantereau.fr
         terms_agreed: yes
@@ -71,6 +73,7 @@
         fullchain_dest: "~/certs/servideo-fullchain.crt"
         acme_version: 2
         challenge: http-01
+        force: yes # for instance when adding domains…
         acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
         #acme_directory: "https://acme-staging-v02.api.letsencrypt.org/directory"
         account_email: romain@chantereau.fr
@@ -95,6 +98,17 @@
         remote_src: yes
         src: "~/certs/servideo.key"
         dest: "~/certs/assemble/02"
+
+        #    - name: Backup certificate
+        #      copy:
+        #        remote_src: yes
+        #        src: "~/certs/servideo.pem"
+        #        dest: "~/certs/servideo.pem.bak"
+
+        #    - name: Delete previous certificate
+        #      file:
+        #        path: "~/certs/servideo.pem"
+        #        state: absent
 
     - name: Concatenate
       assemble:

@@ -1,0 +1,16 @@
+---
+- name: IaC tasks
+  hosts: hetzners
+  become: true
+
+  tasks:
+
+          - name: seems we use several container images, ensure all are up to date
+            containers.podman.podman_image:
+              name: "quay.io/bitnami/mariadb:10.5.10"
+              force: true
+            become: true
+            become_user: "lasaillante"
+
+
+

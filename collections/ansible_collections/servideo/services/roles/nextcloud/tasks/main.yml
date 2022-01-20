@@ -1,0 +1,5 @@
+---
+# tasks file for haproxy reverse proxy
+- name: init the build & running env
+  import_role:
+    name: servideo.pod.service
