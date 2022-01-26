@@ -16,8 +16,8 @@ builddir: "build"
 # * as the dedicated build subfolder name under {{ builddir }}
 #    * in this folder the image Dockerfile will be generated from the “Dockerfile-{{ item }}.j2”
 #    * if defined, all the files and folder in the {{ item }} subfolder of the {{ build_artefact_basedir }} will be copied.
-container_images_to_build: 
-  - "servideo-haproxy"
+#container_images_to_build: 
+#  - "servideo-haproxy"
 
 # The service will certainly need runtime data with specific SELinux labels
 # For each item of the main list:
@@ -37,6 +37,16 @@ runtime_directories:
       - mode: '0770'
         name: "letsencrypt-private"
 
+# Registry to log into wit user & password
+authenticated_registries:
+  - registry: "registry.redhat.io"
+    username: "{{redhat_portal_username }}"
+    password: "{{ redhat_portal_password }}"
+  - registry: "registry.connect.redhat.com"
+    username: "{{redhat_portal_username }}"
+    password: "{{ redhat_portal_password }}"
+
+
 # List of container image to force in the service pod registration
 # At least two images must be presents (build + pull) in order to trigger the use of the pod and not a single container.
 # WORKAROUND: As the module try to pull, even the locally built images, the image list is a fake one until I set up a local registry
@@ -44,6 +54,7 @@ container_images_to_pull:
   - "registry.access.redhat.com/ubi8/pause"
   - "registry.access.redhat.com/ubi8/ubi-minimal"
   - "registry.access.redhat.com/ubi8/python-39"
+  - "registry.connect.redhat.com/haproxytech/haproxy"
 
 # Each item of this list will used as follow:
 # * exposed_port: the port the container will expose inside the pod
