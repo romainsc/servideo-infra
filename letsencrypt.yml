@@ -34,7 +34,6 @@
         dns_server:
         - www.servideo.org
         - nextcloud.servideo.org
-        - nextcloud-staging.servideo.org
     - name: Create a challenge for sample.com using a account key file.
       acme_certificate:
         account_key_src: "~/letsencrypt-private/account.key"
@@ -62,6 +61,7 @@
       copy:
         dest: "~/letsencrypt-challenges/{{ item.key }}/{{ item.value['http-01']['resource'] }}"
         content: "{{ item.value['http-01']['resource_value'] }}"
+        mode: "a+r"
       loop: "{{ letsencrypt_challenge.challenge_data | dict2items }}"
       when: letsencrypt_challenge is changed
 
@@ -91,13 +91,19 @@
       copy:
         remote_src: yes
         src: "~/certs/servideo.crt"
-        dest: "~/certs/assemble/01"
+        dest: "~/certs/assemble/02"
 
     - name: Copy key
       copy:
         remote_src: yes
         src: "~/certs/servideo.key"
-        dest: "~/certs/assemble/02"
+        dest: "~/certs/assemble/01"
+
+    - name: Copy fullchan
+      copy:
+        remote_src: yes
+        src: "~/certs/servideo-fullchain.crt"
+        dest: "~/certs/assemble/03"
 
         #    - name: Backup certificate
         #      copy:
@@ -134,4 +140,8 @@
       become: true
       become_user: root
 
-    
+    - name: Restart haproxy
+      containers.podman.podman_container:
+          name: Haproxy-rproxy-haproxy
+          state: started
+          restart: yes
